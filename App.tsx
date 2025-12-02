@@ -4,6 +4,7 @@ import Header from './components/Header';
 import Loader from './components/Loader';
 import { UploadIcon, ConvertIcon, DownloadIcon, SettingsIcon } from './components/icons';
 import OptionsModal from './components/OptionsModal';
+import PreviewPane from './components/PreviewPane';
 
 const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
 
@@ -118,85 +119,92 @@ const App: React.FC = () => {
     return (
         <div className="min-h-screen font-sans text-slate-800 dark:text-slate-200 transition-colors duration-300">
             <Header />
-            <main className="max-w-4xl mx-auto p-4 sm:p-6 md:p-8">
-                <div className="bg-white dark:bg-slate-800 shadow-xl rounded-lg p-6 md:p-8">
-                    
-                    <div className="mb-6">
-                        <label htmlFor="latex-input" className="block text-lg font-semibold mb-2 text-slate-700 dark:text-slate-300">
-                            Your LaTeX Document
-                        </label>
-                        <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
-                            Paste your LaTeX code below or upload a <code>.tex</code> file.
-                        </p>
-                        <textarea
-                            id="latex-input"
-                            value={latexContent}
-                            onChange={(e) => {
-                                setLatexContent(e.target.value);
-                                setDocxHtml(null);
-                                setError(null);
-                            }}
-                            placeholder="e.g., \documentclass{article}..."
-                            className="w-full h-64 p-4 border border-slate-300 dark:border-slate-600 rounded-md bg-slate-50 dark:bg-slate-700 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow duration-200 resize-y"
-                        />
-                    </div>
-
-                    <div className="flex items-center justify-center mb-6">
-                        <span className="text-sm text-slate-400 dark:text-slate-500">OR</span>
-                    </div>
-
-                    <div className="flex justify-center mb-8">
-                        <label htmlFor="file-upload" className="relative cursor-pointer bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600 text-indigo-600 dark:text-indigo-400 font-semibold py-2 px-4 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm inline-flex items-center transition-all duration-200">
-                           <UploadIcon />
-                           <span className="ml-2">Upload .tex File</span>
-                           <input id="file-upload" name="file-upload" type="file" className="sr-only" accept=".tex" onChange={handleFileChange} />
-                        </label>
-                    </div>
-
-                    {error && (
-                        <div className="bg-red-100 dark:bg-red-900/20 border-l-4 border-red-500 text-red-700 dark:text-red-300 p-4 rounded-md mb-6" role="alert">
-                            <p className="font-bold">{error.title}</p>
-                            <p>{error.message}</p>
+            <main className="max-w-7xl mx-auto p-4 sm:p-6 md:p-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                    {/* Left Column: Input Panel */}
+                    <div className="bg-white dark:bg-slate-800 shadow-xl rounded-lg p-6 md:p-8">
+                        
+                        <div className="mb-6">
+                            <label htmlFor="latex-input" className="block text-lg font-semibold mb-2 text-slate-700 dark:text-slate-300">
+                                Your LaTeX Document
+                            </label>
+                            <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
+                                Paste your LaTeX code below or upload a <code>.tex</code> file.
+                            </p>
+                            <textarea
+                                id="latex-input"
+                                value={latexContent}
+                                onChange={(e) => {
+                                    setLatexContent(e.target.value);
+                                    setDocxHtml(null);
+                                    setError(null);
+                                }}
+                                placeholder="e.g., \documentclass{article}..."
+                                className="w-full h-64 p-4 border border-slate-300 dark:border-slate-600 rounded-md bg-slate-50 dark:bg-slate-700 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow duration-200 resize-y"
+                            />
                         </div>
-                    )}
-                    
-                    <div className="mt-6 text-center border-t border-slate-200 dark:border-slate-700 pt-6">
-                        {isLoading ? (
-                            <Loader />
-                        ) : docxHtml ? (
-                            <div className="flex flex-col items-center gap-4">
-                                <p className="text-lg font-semibold text-green-600 dark:text-green-400">Conversion Successful!</p>
-                                <button
-                                    onClick={handleDownload}
-                                    className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:focus:ring-offset-slate-900 transition-all duration-200 transform hover:scale-105 inline-flex items-center"
-                                >
-                                    <DownloadIcon />
-                                    <span className="ml-2">Download .doc File</span>
-                                </button>
-                            </div>
-                        ) : (
-                            <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-                                <button
-                                    onClick={handleConvert}
-                                    disabled={!latexContent.trim()}
-                                    className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-slate-900 transition-all duration-200 transform hover:scale-105 inline-flex items-center"
-                                >
-                                    <ConvertIcon />
-                                    <span className="ml-2">Convert to Word</span>
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setIsOptionsModalOpen(true)}
-                                    className="inline-flex items-center justify-center px-4 py-3 border border-slate-300 dark:border-slate-600 text-sm font-medium rounded-lg text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-slate-900 transition-colors"
-                                    aria-label="Conversion options"
-                                >
-                                    <SettingsIcon />
-                                    <span className="ml-2 hidden sm:inline">Options</span>
-                                </button>
+
+                        <div className="flex items-center justify-center mb-6">
+                            <span className="text-sm text-slate-400 dark:text-slate-500">OR</span>
+                        </div>
+
+                        <div className="flex justify-center mb-8">
+                            <label htmlFor="file-upload" className="relative cursor-pointer bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600 text-indigo-600 dark:text-indigo-400 font-semibold py-2 px-4 border border-slate-300 dark:border-slate-600 rounded-lg shadow-sm inline-flex items-center transition-all duration-200">
+                               <UploadIcon />
+                               <span className="ml-2">Upload .tex File</span>
+                               <input id="file-upload" name="file-upload" type="file" className="sr-only" accept=".tex" onChange={handleFileChange} />
+                            </label>
+                        </div>
+
+                        {error && (
+                            <div className="bg-red-100 dark:bg-red-900/20 border-l-4 border-red-500 text-red-700 dark:text-red-300 p-4 rounded-md mb-6" role="alert">
+                                <p className="font-bold">{error.title}</p>
+                                <p>{error.message}</p>
                             </div>
                         )}
+                        
+                        <div className="mt-6 text-center border-t border-slate-200 dark:border-slate-700 pt-6">
+                            {isLoading ? (
+                                <Loader />
+                            ) : docxHtml ? (
+                                <div className="flex flex-col items-center gap-4">
+                                    <button
+                                        onClick={handleDownload}
+                                        className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:focus:ring-offset-slate-900 transition-all duration-200 transform hover:scale-105 inline-flex items-center"
+                                    >
+                                        <DownloadIcon />
+                                        <span className="ml-2">Download .doc File</span>
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+                                    <button
+                                        onClick={handleConvert}
+                                        disabled={!latexContent.trim()}
+                                        className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-slate-900 transition-all duration-200 transform hover:scale-105 inline-flex items-center"
+                                    >
+                                        <ConvertIcon />
+                                        <span className="ml-2">Convert to Word</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsOptionsModalOpen(true)}
+                                        className="inline-flex items-center justify-center px-4 py-3 border border-slate-300 dark:border-slate-600 text-sm font-medium rounded-lg text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-slate-900 transition-colors"
+                                        aria-label="Conversion options"
+                                    >
+                                        <SettingsIcon />
+                                        <span className="ml-2 hidden sm:inline">Options</span>
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                    {/* Right Column: Preview Panel */}
+                    <div className="hidden lg:block sticky top-6 h-[calc(100vh-3rem)]">
+                        <PreviewPane htmlContent={docxHtml} isLoading={isLoading} />
                     </div>
                 </div>
+
                  <footer className="text-center mt-8 text-sm text-slate-500 dark:text-slate-400">
                     <p>Powered by Gemini. Conversion quality may vary.</p>
                 </footer>
