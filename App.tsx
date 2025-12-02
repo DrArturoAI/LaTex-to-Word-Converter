@@ -74,7 +74,7 @@ const App: React.FC = () => {
             };
 
             if (err instanceof Error) {
-                if (err.message.includes('API Key')) {
+                if (err.message.includes('Invalid API Key')) {
                     setError({ title: 'API Error', message: 'There is an issue with the API configuration. Please contact support.' });
                 } else if (err.message.includes('could not convert')) {
                     setError({ title: 'Conversion Failed', message: 'The model could not process your LaTeX code. Please check it for significant syntax errors.' });

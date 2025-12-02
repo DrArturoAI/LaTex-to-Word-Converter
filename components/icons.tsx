@@ -13,12 +13,8 @@ export const UploadIcon: React.FC = () => (
 );
 
 export const ConvertIcon: React.FC = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h5M20 20v-5h-5M4 20h5v-5M20 4h-5v5" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 4h5v5" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 9V4h5" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 15v5h-5" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20v-5H4" />
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m6 5H4m0 0l4 4m-4-4l4-4" />
     </svg>
 );
 

@@ -60,14 +60,14 @@ ${latexCode}
 
         if (response && response.text) {
              // Clean up potential markdown code block fences
-            let htmlContent = response.text;
+            let htmlContent = response.text.trim();
             if (htmlContent.startsWith('```html')) {
-                htmlContent = htmlContent.substring(7);
+                htmlContent = htmlContent.slice('```html'.length).trim();
             }
             if (htmlContent.endsWith('```')) {
-                htmlContent = htmlContent.slice(0, -3);
+                htmlContent = htmlContent.slice(0, -'```'.length).trim();
             }
-            return htmlContent.trim();
+            return htmlContent;
         } else {
             throw new Error("The model could not convert the provided LaTeX.");
         }

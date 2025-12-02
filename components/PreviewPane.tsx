@@ -24,7 +24,7 @@ const PreviewPane: React.FC<PreviewPaneProps> = ({ htmlContent, isLoading }) => 
                         srcDoc={htmlContent}
                         title="Document Preview"
                         className="w-full h-full border-0 bg-white"
-                        sandbox="allow-same-origin" // Sandboxing for security
+                        sandbox="" // Sandboxing for security
                     />
                 ) : (
                     <div className="flex items-center justify-center h-full p-4">
